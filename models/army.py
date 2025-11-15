@@ -54,7 +54,7 @@ class Army(BaseModel):
     def train_unit(self, index: int) -> None:
         unit = self.units[index]
         rule = TRAINING_RULES[type(unit)]
-        cost, gain = rule["cost"], rule["gain"]
+        cost, gain = rule.cost, rule.gain
 
         if self.gold < cost:
             raise InsufficientGold(
@@ -67,8 +67,8 @@ class Army(BaseModel):
     def transform_unit(self, index: int) -> None:
         unit = self.units[index]
         rule = TRANSFORMATION_RULES[type(unit)]
-        target_cls = rule["target"]
-        cost = rule["cost"]
+        target_cls = rule.target
+        cost = rule.cost
 
         if target_cls is None:
             raise TransformationError(
