@@ -1,0 +1,6 @@
+[project]
+name = "amalgama-challenge"
+version = "0.1.0"
+description = "This is a sample Python project for the amalgama challenge."
+readme = "README.md"
+dependencies = ["pydantic"]
