@@ -36,19 +36,20 @@ class Army(BaseModel):
         "frozen": False,
     }
 
-    def __init__(self, **data):
-        super().__init__(**data)
+    def model_post_init(self, _) -> None:
+        if self.units:
+            return
 
-        if len(self.units) == 0:
-            if self.civilization not in CIVILIZATION_START:
-                raise ValueError(f"Unknown civilization '{self.civilization}'")
+        civilization = CIVILIZATION_START.get(self.civilization)
+        if civilization is None:
+            raise ValueError(f"Unknown civilization '{self.civilization}'")
 
-            for unit_cls, count in CIVILIZATION_START[self.civilization].items():
-                for _ in range(count):
-                    self.units.append(unit_cls())
+        self.units = [
+            unit_cls() for unit_cls, count in civilization.items() for _ in range(count)
+        ]
 
     def total_strength(self) -> int:
-        return sum(u.strength for u in self.units)
+        return sum(unit.strength for unit in self.units)
 
     def train_unit(self, index: int) -> None:
         unit = self.units[index]
@@ -84,16 +85,16 @@ class Army(BaseModel):
 
         self.gold -= cost
 
-    def _remove_top_units(self, n: int) -> None:
+    def remove_top_units(self, n: int) -> None:
         if not self.units:
             return
 
         sorted_units = sorted(
-            self.units, key=lambda u: (u.strength, u.created_on), reverse=True
+            self.units, key=lambda unit: (unit.strength, unit.created_on), reverse=True
         )
 
-        for u in sorted_units[:n]:
-            self.units.remove(u)
+        for unit in sorted_units[:n]:
+            self.units.remove(unit)
 
     def record_battle(
         self, opponent: Army, result: str, own_strength: int, opp_strength: int
@@ -113,16 +114,16 @@ class Army(BaseModel):
         opp_strength = opponent.total_strength()
 
         if my_strength > opp_strength:
-            opponent._remove_top_units(2)
+            opponent.remove_top_units(2)
             self.gold += 100
             result = "win"
         elif my_strength < opp_strength:
-            self._remove_top_units(2)
+            self.remove_top_units(2)
             opponent.gold += 100
             result = "loss"
         else:
-            self._remove_top_units(1)
-            opponent._remove_top_units(1)
+            self.remove_top_units(1)
+            opponent.remove_top_units(1)
             result = "tie"
 
         self.record_battle(opponent, result, my_strength, opp_strength)

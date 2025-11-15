@@ -3,4 +3,131 @@ name = "amalgama-challenge"
 version = "0.1.0"
 description = "This is a sample Python project for the amalgama challenge."
 readme = "README.md"
-dependencies = ["pydantic"]
+dependencies = ["pre-commit>=4.4.0", "pydantic"]
+
+
+######################
+# pylint configuration
+######################
+
+[tool.pylint.main]
+load-plugins = [
+    "pylint.extensions.bad_builtin",
+    "pylint.extensions.code_style",
+    "pylint.extensions.comparison_placement",
+    "pylint.extensions.consider_refactoring_into_while_condition",
+    "pylint.extensions.dunder",
+    "pylint.extensions.eq_without_hash",
+    "pylint.extensions.for_any_all",
+    "pylint.extensions.mccabe",
+    "pylint.extensions.no_self_use",
+    "pylint.extensions.overlapping_exceptions",
+    "pylint.extensions.private_import",
+    "pylint.extensions.redefined_loop_name",
+    "pylint.extensions.set_membership",
+]
+
+[tool.pylint.DESIGN]
+max-args = 5
+max-attributes = 7
+max-bool-expr = 5
+max-branches = 12
+max-locals = 15
+max-parents = 7
+max-public-methods = 20
+max-returns = 6
+max-statements = 50
+min-public-methods = 2
+
+
+[tool.pylint.EXCEPTIONS]
+overgeneral-exceptions = '''BaseException,
+                       Exception
+'''
+[tool.pylint.basic]
+argument-naming-style = "snake_case"
+argument-rgx = "[a-z_][a-z0-9_]{2,30}$"
+attr-naming-style = "snake_case"
+attr-rgx = "[a-z_][a-z0-9_]{2,30}$"
+class-attribute-naming-style = "any"
+class-attribute-rgx = "([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$"
+class-const-naming-style = "UPPER_CASE"
+class-naming-style = "PascalCase"
+class-rgx = "[A-Z_][a-zA-Z0-9]+$"
+const-naming-style = "UPPER_CASE"
+const-rgx = "(([A-Z_][A-Z0-9_]*)|(__.*__))$"
+docstring-min-length = -1
+function-naming-style = "snake_case"
+function-rgx = "[a-z_][a-z0-9_]{2,30}$"
+good-names = ["i", "j", "k", "ex", "Run", "_"]
+include-naming-hint = true
+inlinevar-naming-style = "any"
+inlinevar-rgx = "[A-Za-z_][A-Za-z0-9_]*$"
+method-naming-style = "snake_case"
+method-rgx = "[a-z_][a-z0-9_]{2,30}$"
+module-naming-style = "snake_case"
+module-rgx = "(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$"
+no-docstring-rgx = "^_"
+property-classes = ["abc.abstractproperty"]
+variable-naming-style = "snake_case"
+variable-rgx = "[a-z_][a-z0-9_]{2,30}$"
+
+
+[tool.pylint.classes]
+defining-attr-methods = ["__init__", "__new__", "setUp"]
+exclude-protected = ["_asdict", "_fields", "_replace", "_source", "_make"]
+valid-classmethod-first-arg = ["cls"]
+valid-metaclass-classmethod-first-arg = ["mcs"]
+
+
+[tool.pylint.deprecated_builtins]
+bad-functions = ["map", "filter"]
+
+
+[tool.pylint.design]
+max-args = 5
+max-attributes = 5
+max-bool-expr = 5
+max-branches = 8
+max-complexity = 10
+max-locals = 10
+max-parents = 7
+max-public-methods = 10
+max-returns = 6
+max-statements = 30
+
+
+[tool.pylint.exceptions]
+overgeneral-exceptions = ["'builtins.Exception'"]
+
+
+[tool.pylint.format]
+indent-after-paren = 4
+indent-string = "    "
+max-line-length = 120
+max-module-lines = 300
+
+
+disable = [
+    "redefined-outer-name",
+    "missing-function-docstring",
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "import-error",
+    "invalid-name",
+    "logging-fstring-interpolation",
+    "consider-using-assignment-expr",
+    "subprocess-run-check",
+    "unused-import",                  # Check and fix by Ruff
+    "too-few-public-methods",
+
+]
+
+
+enable = [
+    "bad-inline-option",
+    "file-ignored",
+    "useless-suppression",
+    "deprecated-pragma",
+    "use-symbolic-message-instead",
+]
