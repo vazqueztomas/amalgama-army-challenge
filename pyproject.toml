@@ -120,7 +120,6 @@ disable = [
     "subprocess-run-check",
     "unused-import",                  # Check and fix by Ruff
     "too-few-public-methods",
-
 ]
 
 
