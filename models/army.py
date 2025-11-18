@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -28,8 +27,8 @@ class Army(BaseModel):
     name: str
     civilization: str
     gold: int = 1000
-    units: List[Unit] = Field(default_factory=list)
-    history: List[BattleRecord] = Field(default_factory=list)
+    units: list[Unit] = Field(default_factory=list[Unit])
+    history: list[BattleRecord] = Field(default_factory=list[BattleRecord])
 
     model_config = {
         "validate_assignment": True,
@@ -67,10 +66,10 @@ class Army(BaseModel):
     def transform_unit(self, index: int) -> None:
         unit = self.units[index]
         rule = TRANSFORMATION_RULES[type(unit)]
-        target_cls = rule.target
+        target = rule.target
         cost = rule.cost
 
-        if target_cls is None:
+        if target is None:
             raise TransformationError(
                 f"{unit.unit_type} cannot be transformed further."
             )
@@ -80,7 +79,7 @@ class Army(BaseModel):
                 f"Army '{self.name}' does not have enough gold to transform."
             )
 
-        new_unit = target_cls(created_on=unit.created_on)
+        new_unit = target(created_on=unit.created_on)
         self.units[index] = new_unit
 
         self.gold -= cost
